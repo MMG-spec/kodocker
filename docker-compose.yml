@@ -1,0 +1,28 @@
+version: "3"
+services:
+  kod-nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - "$PWD/nginx/default.conf:/etc/nginx/conf.d/default.conf"
+      - "$PWD/html:/usr/share/nginx/html"
+    container_name: "kod-nginx"
+
+  kod-php:
+    build: ./php7.3
+    image: php7.3:kod
+    volumes:
+      - "$PWD/html:/var/www/html"
+    container_name: "kod-php"
+    user: "${UID}:${GID}"
+    
+  kod-mysql:
+    image: mysql:5.6
+    environment:
+      - MYSQL_ROOT_PASSWORD=${YOUR_MYSQL_ROOT_PASSWORD}
+    container_name: "kod-mysql"
+  
+  kod-redis:
+    image: redis:latest
+    container_name: "kod-redis"
